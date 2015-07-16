@@ -77,12 +77,14 @@ func backfill(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		err := index.Get(c, strconv.Itoa(i), nil)
+		comicNum := strconv.Itoa(i)
+		var s ComicSearch
+		err := index.Get(c, comicNum, &s)
 		if err == nil {
 			continue
 		}
 
-		t := taskqueue.NewPOSTTask("/index", map[string][]string{"id": {strconv.Itoa(i)}})
+		t := taskqueue.NewPOSTTask("/index", map[string][]string{"id": {comicNum}})
 		if _, err := taskqueue.Add(c, t, ""); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
