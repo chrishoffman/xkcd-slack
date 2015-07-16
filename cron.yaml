@@ -1,0 +1,4 @@
+cron:
+- description: daily backfill job
+  url: /backfill
+  schedule: every 24 hours

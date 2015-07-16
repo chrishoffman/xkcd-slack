@@ -63,11 +63,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 }
 
 func backfill(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.Error(w, "POST requests only", http.StatusMethodNotAllowed)
-		return
-	}
-
 	c := appengine.NewContext(r)
 
 	index, err := search.Open(xkcdIndex)
