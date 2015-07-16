@@ -3,6 +3,7 @@ package xkcdslack
 import (
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"net/http"
 	"strings"
 
@@ -39,6 +40,7 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var comicList []*ComicSearch
 	searchText := strings.Replace(text, triggerWord, "", 1)
 	for t := index.Search(c, searchText, nil); ; {
 		var xkcd ComicSearch
@@ -51,11 +53,17 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 
-		xkcdURL := fmt.Sprintf("https://xkcd.com/%s/", xkcd.Num)
+		comicList = append(comicList, &xkcd)
+	}
+
+	if len(comicList) > 0 {
+		n := rand.Intn(len(comicList))
+		xkcdURL := fmt.Sprintf("https://xkcd.com/%s/", comicList[n].Num)
 		sr := &SearchResponse{xkcdURL}
 		rsp, _ := json.Marshal(sr)
 		fmt.Fprintf(w, string(rsp))
 		return
 	}
+
 	http.Error(w, "No match", http.StatusNotFound)
 }
