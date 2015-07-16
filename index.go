@@ -1,7 +1,6 @@
 package xkcdslack
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -21,7 +20,7 @@ type ComicSearch struct {
 
 func init() {
 	http.HandleFunc("/index", index)
-	http.HandleFunc("/backfill", backfill)
+	http.HandleFunc("/task/backfill", backfill)
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
@@ -59,7 +58,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	fmt.Fprint(w, "Retrieved document: ", xSearch)
+	w.WriteHeader(http.StatusNoContent)
 }
 
 func backfill(w http.ResponseWriter, r *http.Request) {
@@ -73,8 +72,12 @@ func backfill(w http.ResponseWriter, r *http.Request) {
 
 	current, _ := GetCurrent(c)
 	for i := 1; i < current.Num; i++ {
-		var s ComicSearch
-		err := index.Get(c, strconv.Itoa(i), &s)
+		// xcdc returns 404 with issue 404
+		if i == 404 {
+			continue
+		}
+
+		err := index.Get(c, strconv.Itoa(i), nil)
 		if err == nil {
 			continue
 		}

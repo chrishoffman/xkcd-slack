@@ -51,7 +51,8 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 
-		sr := &SearchResponse{xkcd.Img}
+		xkcdURL := fmt.Sprintf("https://xkcd.com/%s/", xkcd.Num)
+		sr := &SearchResponse{xkcdURL}
 		rsp, _ := json.Marshal(sr)
 		fmt.Fprintf(w, string(rsp))
 		return
