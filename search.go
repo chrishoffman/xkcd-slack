@@ -19,6 +19,11 @@ func init() {
 }
 
 func searchHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" && r.Method != "POST" {
+		http.Error(w, "GET/POST requests only", http.StatusMethodNotAllowed)
+		return
+	}
+
 	c := appengine.NewContext(r)
 
 	index, err := search.Open(xkcdIndex)
