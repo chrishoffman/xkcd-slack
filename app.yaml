@@ -4,5 +4,9 @@ runtime: go
 api_version: go1
 
 handlers:
+- url: /task/backfill
+  script: _go_app
+  login: admin
+
 - url: /.*
   script: _go_app

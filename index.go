@@ -72,10 +72,14 @@ func backfill(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		}
 
 		comicNum := strconv.Itoa(i)
-		var s ComicSearch
-		err := index.Get(c, comicNum, &s)
-		if err == nil {
-			continue
+
+		force := r.FormValue("force")
+		if force != "yes" {
+			var s ComicSearch
+			err := index.Get(c, comicNum, &s)
+			if err == nil {
+				continue
+			}
 		}
 
 		t := taskqueue.NewPOSTTask("/index", map[string][]string{"id": {comicNum}})
