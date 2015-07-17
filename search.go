@@ -6,10 +6,12 @@ import (
 	"math/rand"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/julienschmidt/httprouter"
 
 	"appengine"
+	"appengine/datastore"
 	"appengine/search"
 )
 
@@ -58,4 +60,25 @@ func searchWebhookHandler(w http.ResponseWriter, r *http.Request, _ httprouter.P
 	}
 	rsp, _ := json.Marshal(sr)
 	fmt.Fprintf(w, string(rsp))
+
+	logSearch(c, r.FormValue("user_name"), r.FormValue("channel_name"), r.FormValue("team_domain"), searchText)
+}
+
+type searchLog struct {
+	Date       time.Time
+	User       string
+	Channel    string
+	Domain     string
+	SearchTerm string
+}
+
+func logSearch(c appengine.Context, user, channel, domain, searchTerm string) {
+	log := searchLog{
+		User:       user,
+		Channel:    channel,
+		Domain:     domain,
+		SearchTerm: searchTerm,
+		Date:       time.Now(),
+	}
+	datastore.Put(c, datastore.NewIncompleteKey(c, "SearchLog", nil), &log)
 }
