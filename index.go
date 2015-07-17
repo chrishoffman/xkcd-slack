@@ -63,7 +63,7 @@ func backfill(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	}
 
 	current, _ := GetCurrent(c)
-	for i := 1; i < current.Num; i++ {
+	for i := 1; i <= current.Num; i++ {
 		// xcdc returns 404 with issue 404
 		if i == 404 {
 			continue
