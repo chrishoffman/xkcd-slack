@@ -14,10 +14,11 @@ import (
 const xkcdIndex = "xkcd"
 
 type ComicSearch struct {
-	Num   string
-	Title string
-	Img   string
-	Alt   string
+	Num        string
+	Title      string
+	Img        string
+	Alt        string
+	Transcript string
 }
 
 func index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -42,6 +43,7 @@ func index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		x.Title,
 		x.Img,
 		x.Alt,
+		x.Transcript,
 	}
 
 	id := strconv.Itoa(x.Num)
