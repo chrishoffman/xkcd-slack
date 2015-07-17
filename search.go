@@ -49,14 +49,13 @@ func searchWebhookHandler(w http.ResponseWriter, r *http.Request, _ httprouter.P
 		comicList = append(comicList, &xkcd)
 	}
 
+	sr := new(searchWebhookResponse)
 	if len(comicList) == 0 {
-		http.Error(w, "No match", http.StatusNotFound)
-		return
+		sr.Text = "EPOCH FAIL!"
+	} else {
+		n := rand.Intn(len(comicList))
+		sr.Text = fmt.Sprintf("https://xkcd.com/%s/", comicList[n].Num)
 	}
-
-	n := rand.Intn(len(comicList))
-	xkcdURL := fmt.Sprintf("https://xkcd.com/%s/", comicList[n].Num)
-	sr := &searchWebhookResponse{xkcdURL}
 	rsp, _ := json.Marshal(sr)
 	fmt.Fprintf(w, string(rsp))
 }
