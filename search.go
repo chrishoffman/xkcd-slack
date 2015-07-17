@@ -68,7 +68,7 @@ func searchSlashHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 		sr := &searchSlashResponse{
 			Text:        fmt.Sprintf("<%s>", xkcdURL),
 			UnfurlLinks: true,
-			Channel:     r.FormValue("channel"),
+			Channel:     r.FormValue("channel_name"),
 		}
 		rsp, _ := json.Marshal(sr)
 
