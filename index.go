@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/julienschmidt/httprouter"
+
 	"appengine"
 	"appengine/search"
 	"appengine/taskqueue"
@@ -18,17 +20,7 @@ type ComicSearch struct {
 	Alt   string
 }
 
-func init() {
-	http.HandleFunc("/index", index)
-	http.HandleFunc("/task/backfill", backfill)
-}
-
-func index(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.Error(w, "POST requests only", http.StatusMethodNotAllowed)
-		return
-	}
-
+func index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	c := appengine.NewContext(r)
 
 	index, err := search.Open(xkcdIndex)
@@ -61,7 +53,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func backfill(w http.ResponseWriter, r *http.Request) {
+func backfill(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	c := appengine.NewContext(r)
 
 	index, err := search.Open(xkcdIndex)
