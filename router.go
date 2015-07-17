@@ -8,8 +8,7 @@ import (
 
 func init() {
 	router := httprouter.New()
-	router.POST("/search/webhook", searchWebhookHandler)
-	router.POST("/search/slash", searchSlashHandler)
+	router.POST("/search", searchWebhookHandler)
 	router.POST("/index", index)
 	router.GET("/task/backfill", backfill)
 	http.Handle("/", router)

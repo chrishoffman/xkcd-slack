@@ -1,4 +1,4 @@
 cron:
 - description: daily backfill job
   url: /task/backfill
-  schedule: every 24 hours
+  schedule: every 2 hours
