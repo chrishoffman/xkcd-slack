@@ -67,7 +67,7 @@ func searchSlashCommandHandler(w http.ResponseWriter, r *http.Request, _ httprou
 		attachment := &searchSlashCommandAttachment{
 			Text:      comic.Alt,
 			TitleLink: fmt.Sprintf("https://xkcd.com/%s/", comic.Num),
-			Title:     comic.Title,
+			Title:     fmt.Sprintf("%s (#%s)", comic.Title, comic.Num),
 			ImageUrl:  comic.Img,
 		}
 		sr.Attachments = []*searchSlashCommandAttachment{attachment}
